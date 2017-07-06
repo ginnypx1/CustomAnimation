@@ -152,15 +152,15 @@ class ViewController: UIViewController {
     }
     
     func oneBigDot() {
-        
+        // hide the other dots
         orangeView.isHidden = true
         greenView.isHidden = true
         blueView.isHidden = true
         
         UIView.animate(withDuration: 2, animations: {
-            self.pinkView.center.x -= 110
+            self.pinkView.center.x -= 105
             self.pinkView.center.y += 200
-            
+            self.pinkView.transform = CGAffineTransform(scaleX: 2, y: 2)
         })
     }
     
