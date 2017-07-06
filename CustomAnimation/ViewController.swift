@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     func pullSquaresToMiddle() {
         // bring the views into the center
         /*
-        UIView.animate(withDuration: 4.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
+        UIView.animate(withDuration: 4.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: .curveLinear, animations: {
             self.pinkView.center = CGPoint(x: self.view.frame.width/2 - 35, y: self.view.frame.height/2 - 35)
             self.orangeView.center = CGPoint(x: self.view.frame.width/2 + 35, y: self.view.frame.height/2 - 35)
             self.greenView.center = CGPoint(x: self.view.frame.width/2 - 35, y: self.view.frame.height/2 + 35)

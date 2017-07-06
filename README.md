@@ -28,3 +28,14 @@ The app data was created in XCode 9 Beta.
 ## Additional Features
 
 A transcript of the presentation to go with the app and the steps to build the full app through the presentation.
+
+## Flow
+
+1. positionSquaresOutOfView - removes the four views from the main view so they can be animated in, prep work
+2. pullSquaresToMiddle - most basic UIView.animate(withDuration:) example (Can be done with springs to demo full block)
+3. squaresToCircles - demos a basic layer animation by altering the cornerRadius of the view
+4. changeBackgroundView - basic UIView.animate, can introduce delay, change entire screen
+5. fadeOut/fadeIn - demos how popular fade in and out is done, introduces the concept of UIView.animateKeyframes
+6. moveCirclesToRight - adds in the spring damping option to the basic UIView.animate(withDuration:)
+7. movesCirclesToLeft() - adds in the concept of the four timing curves and allows user to compare each
+8. oneBigDot - adds in the concept of transform, CGAffineTransform, to make the dot bigger
