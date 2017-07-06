@@ -17,7 +17,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var greenView: UIView!
     @IBOutlet weak var blueView: UIView!
     
-
+    // MARK: - View
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,31 +31,36 @@ class ViewController: UIViewController {
     
     func startAnimating() {
         
+        
         pullSquaresToMiddle()
         squaresToCircles()
         changeBackgroundView()
         fadeOut()
-        //fadeIn()
+            // chains to fadeIn()
+            // chains to moveCirclesToRight()
+            // chains to moveCirclesToLeft()
+            // chains to oneBigDot()
     }
     
     // MARK: - animations
     
     func pullSquaresToMiddle() {
         // bring the views into the center
+        /*
         UIView.animate(withDuration: 4.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
             self.pinkView.center = CGPoint(x: self.view.frame.width/2 - 35, y: self.view.frame.height/2 - 35)
             self.orangeView.center = CGPoint(x: self.view.frame.width/2 + 35, y: self.view.frame.height/2 - 35)
             self.greenView.center = CGPoint(x: self.view.frame.width/2 - 35, y: self.view.frame.height/2 + 35)
             self.blueView.center = CGPoint(x: self.view.frame.width/2 + 35, y: self.view.frame.height/2 + 35)
         }, completion: nil)
-        /*
+        */
         UIView.animate(withDuration: 4, animations: {
             self.pinkView.center = CGPoint(x: self.view.frame.width/2 - 35, y: self.view.frame.height/2 - 35)
             self.orangeView.center = CGPoint(x: self.view.frame.width/2 + 35, y: self.view.frame.height/2 - 35)
             self.greenView.center = CGPoint(x: self.view.frame.width/2 - 35, y: self.view.frame.height/2 + 35)
             self.blueView.center = CGPoint(x: self.view.frame.width/2 + 35, y: self.view.frame.height/2 + 35)
         })
-        */
+        
     }
 
     func squaresToCircles() {
@@ -87,24 +93,74 @@ class ViewController: UIViewController {
             UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25, animations: {
                 self.blueView.alpha = 0
             })
+        }, completion: { finished in
+            self.fadeIn()
         })
     }
     
     func fadeIn() {
-        UIView.animateKeyframes(withDuration: 2.0, delay: 8.0, options: [], animations: {
+        UIView.animateKeyframes(withDuration: 2.0, delay: 0.0, options: [], animations: {
             
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
-                self.pinkView.alpha = 1
-            })
-            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
-                self.orangeView.alpha = 1
-            })
-            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25, animations: {
-                self.greenView.alpha = 1
-            })
-            UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25, animations: {
                 self.blueView.alpha = 1
             })
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.greenView.alpha = 1
+            })
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25, animations: {
+                self.orangeView.alpha = 1
+            })
+            UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.25, animations: {
+                self.pinkView.alpha = 1
+            })
+        }, completion: { finished in
+            self.moveCirclesToRight()
+        })
+    }
+    
+    func moveCirclesToRight() {
+        // bring the views into the center
+        UIView.animate(withDuration: 4.0, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
+            self.pinkView.center.y -= (self.view.frame.height/6)*2
+            self.pinkView.center.x -= 100
+            self.orangeView.center.y -= (self.view.frame.height/6)*0.5
+            self.orangeView.center.x -= 170
+            self.greenView.center.y += (self.view.frame.height/6)*0.5
+            self.greenView.center.x -= 100
+            self.blueView.center.y += (self.view.frame.height/6)*2
+            self.blueView.center.x -= 170
+        }, completion: { finished in
+            self.moveCirclesToLeft()
+        })
+    }
+    
+    func moveCirclesToLeft() {
+        UIView.animate(withDuration: 4, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .curveLinear, animations: {
+            self.pinkView.center.x += 250
+        })
+        UIView.animate(withDuration: 2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+            self.orangeView.center.x += 250
+        })
+        UIView.animate(withDuration: 2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+            self.greenView.center.x += 250
+        })
+        UIView.animate(withDuration: 2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            self.blueView.center.x += 250
+        }, completion: { finished in
+            self.oneBigDot()
+        })
+    }
+    
+    func oneBigDot() {
+        
+        orangeView.isHidden = true
+        greenView.isHidden = true
+        blueView.isHidden = true
+        
+        UIView.animate(withDuration: 2, animations: {
+            self.pinkView.center.x -= 110
+            self.pinkView.center.y += 200
+            
         })
     }
     
