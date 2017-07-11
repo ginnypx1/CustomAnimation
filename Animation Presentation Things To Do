@@ -1,0 +1,86 @@
+Animation Presentation Things To Do
+
+1. positionSquaresOutOfView - removes the four views from the main view so they can be animated in, prep work
+2. pullSquaresToMiddle - most basic UIView.animate(withDuration:) example (Can be done with springs to demo full block) 
+    The following properties of a UIView are animatable: 
+        frame: size and position
+        transform: scale, rotate and translate
+        bounds: size
+        alpha: transparency
+        center: relatie position
+        backgroundColor
+        contentStretch: how contents are stretched to fill available space
+        addition and removal of views
+        change of contents (transition)
+3. squaresToCircles - demos a basic layer animation by altering the cornerRadius of the view
+4. changeBackgroundView - basic UIView.animate, can introduce delay, change entire screen
+5. fadeOut/fadeIn - demos how popular fade in and out is done, introduces the concept of UIView.animateKeyframes 
+    Keyframes useful to chain animations, or define complex animation
+6. moveCirclesToRight - adds in the spring damping option to the basic UIView.animate(withDuration:)
+7. movesCirclesToLeft() - adds in the concept of the four timing curves and allows user to compare each
+        Options that can be passed in: delay before starting, type of timing curve, number of times to repeat (.repeat), if animation should reverse (.autoreverse), if touchEvents are delivered while animation is in progress (.allowUserInteraction), if it should interrupt other animations or wait for completion (.overrideInheritedDuration, .overrideInheritedCurve, .beginFromCurrentState)
+8. oneBigDot - adds in the concept of transform, CGAffineTransform, to make the dot bigger
+
+/*****************************************************************************/
+Simple: imageView transition
+UIView.transition(withView:duration:options:animations:completion:)
+    show, hide
+    add subviews, remove subviews
+UiView.transition(fromView:toView:duration:options:completion:)
+.transitionFlipFromLeft (Right)
+.transitionCurlUp (Down)
+.transitionFlipFromBottom (Top)
+.transitionCrossDissolve
+
+/*****************************************************************************/
+UIViewPropertyAnimator:
+    let anim = UIViewPropertyAnimator(duration: 1.0, curve: .linear) {
+        self.view.backgroundColor = red
+    }
+    anim.startAnimation() 
+    // .pauseAnimation(), .stopAnimation(bool), if false, can be told to finishlater
+    // .continueAnimation(withTimingParameters:durationFactor:)
+    // .startAnimation(afterDelay:)
+
+Disadvantages: will not help with repeating, autoreversing, ore transitions
+Advantages: full range of timing curves, multiple completion functions, ability to pause, resume, reverse & interact
+
+.state - .inactive before starting, .active after, returns to .inactive
+.fractionComplete
+.addCompletion(_:)
+.addAnimations(_:), .addAnimations(-:delayFactor:)
+.performWithoutAnimation(-:) can go anywhere inside
+
+Timing Curves: ** detail in Programming iOS10 Animation Notes
+
+/*****************************************************************************/
+
+CORE ANIMATION
+Use Core Animation to animate a layer's: 
+    size and position
+    center
+    Z order
+    shadow
+    transformations in 3D space
+    border (rounded Corners)
+    add or remove from hierarcy
+    stretching during resizing
+    current contents
+    clipping of sublayers
+    opacity
+    rasterization behavior
+// use it as a mask, animate gradient
+
+
+/*****************************************************************************/
+Animated View Controller Transitions
+
+UIModalTransitionStyle: .coverVertical (default, slide from bottom), .flipHorizontal, .crossDissolve, .partialCurl
+
+Default side slide
+Drop from above, fall into place (bounce, snap like spring) // check AnimationTests
+
+1. Custom one to another - expands out from center
+2. Custom Collection View Cell - tap to expand, contract to/from full screen
+3. Custom TableView Cells - slide up animation
+
