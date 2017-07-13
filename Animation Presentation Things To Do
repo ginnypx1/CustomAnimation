@@ -1,28 +1,55 @@
 Animation Presentation Things To Do
 
+Position and Size: bounds, frame, center (probably constraint animation)
+Transformation: transform: translation, rotation, scale (sometimes constraint animation)
+Appearance: backgroundColor, alpha (never need to worry about constraints)
+
+Often, you want to:
+    1. create and setup helper view
+    2. fade helper view in using animations: of UIView.animate()
+    3. update background view and remove helper view using completion: of UIView.animate()
+
 1. positionSquaresOutOfView - removes the four views from the main view so they can be animated in, prep work
 2. pullSquaresToMiddle - most basic UIView.animate(withDuration:) example (Can be done with springs to demo full block) 
-    The following properties of a UIView are animatable: 
-        frame: size and position
-        transform: scale, rotate and translate
-        bounds: size
-        alpha: transparency
-        center: relatie position
-        backgroundColor
-        contentStretch: how contents are stretched to fill available space
-        addition and removal of views
-        change of contents (transition)
 3. squaresToCircles - demos a basic layer animation by altering the cornerRadius of the view
 4. changeBackgroundView - basic UIView.animate, can introduce delay, change entire screen
 5. fadeOut/fadeIn - demos how popular fade in and out is done, introduces the concept of UIView.animateKeyframes 
     Keyframes useful to chain animations, or define complex animation
 6. moveCirclesToRight - adds in the spring damping option to the basic UIView.animate(withDuration:)
+    * Any easing curve options are negated when you add in spring damping
+    * The smaller the damping, the more the view bounces at the end. 1 is straight animation.
 7. movesCirclesToLeft() - adds in the concept of the four timing curves and allows user to compare each
         Options that can be passed in: delay before starting, type of timing curve, number of times to repeat (.repeat), if animation should reverse (.autoreverse), if touchEvents are delivered while animation is in progress (.allowUserInteraction), if it should interrupt other animations or wait for completion (.overrideInheritedDuration, .overrideInheritedCurve, .beginFromCurrentState)
 8. oneBigDot - adds in the concept of transform, CGAffineTransform, to make the dot bigger
+    - can be concatenated with .concatenating()
+    Usually will follow steps:
+        1. Create and set up helper label
+        2. fade out and translate real label
+        3. fade in and translate helper label
+        4. update real label and remove helper
 
 /*****************************************************************************/
-Simple: imageView transition
+- constraint animation
+
+** if you animate a view with autolayout constraints, the view will snap back to constrained position after animation
+
+- constaints have a multiplier and a constant
+- constants are very easy to animate. 
+    Just add or subtract to contraint outside of animation, then in UIView.animate(), call view.layoutIfNeeded()
+- multipliers are read only, so you have to remove and replace them.
+    fancyConstraint.isActive
+    - easiest if you give the constraint an identifier in storyboard
+    if constraint.identifier == "StoryboardID" {
+        constraint.isActive = false
+        let newConstraint = NSLayoutConstraint(item: titleLable, attribute: .centerY, relatedBy: .equal, toItem: titleLabel.superview!, attribute: .centerY, multiplier: 1.5, constant: 5.0)
+        newConstraint.identifier = "StoryboardID"
+        newConstraint.isActive = true
+    }
+
+
+/*****************************************************************************/
+Transitions
+
 UIView.transition(withView:duration:options:animations:completion:)
     show, hide
     add subviews, remove subviews
@@ -31,6 +58,28 @@ UiView.transition(fromView:toView:duration:options:completion:)
 .transitionCurlUp (Down)
 .transitionFlipFromBottom (Top)
 .transitionCrossDissolve
+
+Triggers: 1. toggle .isHidden, 2. addSubview(), 3. removeFromSuperview()
+    - .isHidden acts as its own container view but
+    - to remove or add views, you need a separate container view
+
+UIView.transition(with: view, duration: 1.0, options: .transitionFlipFromTop, animations: {
+    view.isHidden = true
+}, completion: nil)
+
+let aView = label.superview!
+UIView.transition(with: aView, duration: 1.0, options: [.curveEaseIn, .transitionCurlUp], animations: {
+    self.label.removeFromSuperview()
+}, completion: { finished in
+    aView.addSubview(self.label)
+})
+
+- transitions can't have a delay. Workaround is:
+func delay(seconds: Double, completion: @escaping ()->Void) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: completion)
+}
+
+- Add .allowUserInteraction to options if needed (Buttons, scrollView, always be interactive)
 
 /*****************************************************************************/
 UIViewPropertyAnimator:
