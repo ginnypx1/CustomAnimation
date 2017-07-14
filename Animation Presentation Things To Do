@@ -133,3 +133,51 @@ Drop from above, fall into place (bounce, snap like spring) // check AnimationTe
 2. Custom Collection View Cell - tap to expand, contract to/from full screen
 3. Custom TableView Cells - slide up animation
 
+1. Need a TransitionContext: a container view - a superview for all views used in transition
+    - will give you access to parameters and viewControllers in the transition
+    Delegate: UIViewControllerTransitioningDelegate
+        - func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning?
+        - func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning?
+
+    class Animator: NSObject, UIViewControllerAnimatedTransitioning {
+        let duration = 1.0
+        let originFrame = CGRect.zero
+        var presenting = true
+        func transitionDuration { return duration }
+        func animateTransition { 
+            // 1. Set up Transition
+            // all the views you want to animate and their state at start of transition
+            let containerView = transitionContext.containerView
+            let toView = transitionContext.view(forKey: .to)!
+            ...
+            containerView.addSubview(toView)
+
+            // 2. Animate!
+            UIView.animate(withDuration: 1.0, delay: 0.0, options: [], animations: {
+
+            }, 
+            // 3. Complete Transition
+            completion: { _ in
+                transitionContext.completeTransition(true)
+            })
+        }
+    }
+
+2. Also need an Animator: object conforming to UIViewControllerAnimatedTransitioning
+    - func transitionDuration(using transitionContext: UIViewControllerContextTransitioning)
+    - func animateTransition(using transitionContext: UiViewControllerContextTransitioning)
+
+    extension ViewController: UIViewControllerTransitioningDelegate {
+      let transition = Animator()
+      func animationController(forPresented) { 
+        transition.presenting = true
+        return transition 
+      }
+      func animationController(forDismissed) { 
+        transition.presenting = false
+        return transition 
+      }
+
+      in function which segues to new view: newView.transitioningDelegate = self
+    }
+
